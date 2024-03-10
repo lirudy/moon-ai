@@ -5,6 +5,10 @@
 ## Features
 一个简单的vscode扩展，可以支持OPENAI的代理服务网站，也支持text-generation-webui网站，可以实现代理服务网站的访问，并支持text-genetration-webui网站的访问。
 
+当前已经测试的模型：
+- deepseeker-code-34b-instruct
+
+
 ### 代码解释
 选择一块代码，右键菜单中点击"moon-ai:解释代码"，可以用快捷键"ctrl+shift+e"
 
