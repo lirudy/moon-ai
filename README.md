@@ -1,13 +1,12 @@
 # moon-ai README
 
- moon-ai是一个简单的vscode扩展。
+ moon-ai是一个简单的vscode扩展，作为一个AI助手，可以支持代码生成、代码解释。
 
 ## Features
-一个简单的vscode扩展，可以支持OPENAI的代理服务网站，也支持text-generation-webui网站，可以实现代理服务网站的访问，并支持text-genetration-webui网站的访问。
+一个简单的vscode扩展，可以支持OPENAI的国内代理服务网站，也支持text-generation-webui本地部署的模型服务。
 
 当前已经测试的模型：
 - deepseek-coder-34b-instruct
-
 
 ### 代码解释
 选择一块代码，右键菜单中点击"moon-ai:解释代码"，可以用快捷键"ctrl+shift+e"
