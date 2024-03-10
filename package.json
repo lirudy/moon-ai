@@ -1,0 +1,78 @@
+{
+  "name": "moon-ai",
+  "displayName": "Moon AI",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "moon-ai.explain",
+        "title": "Moon AI : 解释代码"
+      },     
+      {
+        "command": "moon-ai.autocompl",
+        "title": "Moon AI : 自动完成"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "moon-ai.explain",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorFocus && !editorReadonly"
+      },
+      {
+        "command": "moon-ai.autocompl",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "editorFocus && !editorReadonly"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "moon-ai.autocompl",
+          "group": "navigation"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "moon-ai.explain",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "@vscode/test-cli": "^0.0.6",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "openai": "^4.28.4"
+  }
+}
