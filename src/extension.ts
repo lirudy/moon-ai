@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 
 import OpenAI from "openai";
+import { sleep } from 'openai/core.mjs';
 
 //读取当前用户目录下的moon-ai.json，如果没有存在，则创建一个
 const home = require('os').homedir();
@@ -29,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('你好 银月AI已经启动!');
+	
 	
 
 	// 解释代码命令
@@ -98,6 +99,67 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(explain);
 	context.subscriptions.push(autocompl);
 
+	let suggestProvider: vscode.InlineCompletionItemProvider = {
+		async provideInlineCompletionItems(document, position, context, token) {
+			console.log("-----");
+
+			const editor = vscode.window.activeTextEditor;
+
+			if (!editor) {
+				return;
+			}
+
+			const process = vscode.window.setStatusBarMessage("银月AI正在处理中...");
+			
+			const selection = editor.selection;
+
+			// 获取向上5行的数据
+			const selectedText = editor.document.lineAt(selection.active.line > 5 ? selection.active.line - 5 : 0).text;
+			
+			const currentPosition = editor.selection.active;
+			
+			const result: vscode.InlineCompletionList = {
+				items: [],
+			};
+
+			const chatCompletion = openai.completions.create({
+				model: conf["model"],
+				prompt: selectedText,
+				max_tokens: 100,
+			}).then((response) => {
+				const resp = response.choices[0].text;
+				console.log(selectedText+"-----"+resp);
+			
+				if (resp) {					
+					result.items.push({
+						insertText: new vscode.SnippetString(resp),
+						range: new vscode.Range(currentPosition.translate(0, resp.length), currentPosition),     
+												
+					});
+					
+				};
+
+			}).catch((error) => {
+				console.log(error);
+			});
+			
+			process.dispose();
+			console.log(result.items[0].insertText);
+
+			return result;
+
+            }
+	};
+
+
+	
+	context.subscriptions.push(
+		vscode.languages.registerInlineCompletionItemProvider({ pattern: "**" },
+			suggestProvider
+		)
+	);
+
+	console.log('你好 银月AI已经启动!');
 
 	
 
