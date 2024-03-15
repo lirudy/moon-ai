@@ -5,6 +5,12 @@
 ## Features
 一个简单的vscode扩展，可以支持OPENAI的国内代理服务网站，也支持text-generation-webui本地部署的模型服务。
 
+v0.0.1
+支持1.67以上版本安装;
+支持tab键触发推理，并提示，可用tab进行选择;
+支持静止5秒后进行提示，以减少对服务端的访问频率;
+
+
 当前已经测试的模型：
 - deepseek-coder-34b-instruct
 
