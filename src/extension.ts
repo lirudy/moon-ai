@@ -99,8 +99,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(explain);
 	context.subscriptions.push(autocompl);
 
-	let suggestProvider: vscode.InlineCompletionItemProvider = {
+	const suggestProvider: vscode.InlineCompletionItemProvider = {
 		async provideInlineCompletionItems(document, position, context, token) {
+
 			console.log("-----");
 
 			const editor = vscode.window.activeTextEditor;
@@ -109,46 +110,55 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
+			const currentPosition = editor.selection.active;
+			await new Promise((f) => setTimeout(f, 5000));
+			const secondPosition = editor.selection.active;
+
+			if (currentPosition === secondPosition) {
+				console.log("可以开始处理...");
+			} else {				
+				return;
+			}
+
+
 			const process = vscode.window.setStatusBarMessage("银月AI正在处理中...");
 			
 			const selection = editor.selection;
 
+
 			// 获取向上5行的数据
-			const selectedText = editor.document.lineAt(selection.active.line > 5 ? selection.active.line - 5 : 0).text;
-			
-			const currentPosition = editor.selection.active;
+			const selectRect = new vscode.Selection(currentPosition.line > 5 ? currentPosition.line - 5 : 0,
+				0,
+				currentPosition.line,
+				currentPosition.character
+			);
+			const selectedText = document.getText(selectRect).trim();			
 			
 			const result: vscode.InlineCompletionList = {
 				items: [],
 			};
 
-			const chatCompletion = openai.completions.create({
+			const chatCompletion = await openai.completions.create({
 				model: conf["model"],
 				prompt: selectedText,
 				max_tokens: 100,
 			}).then((response) => {
-				const resp = response.choices[0].text;
-				console.log(selectedText+"-----"+resp);
-			
+				const resp = response.choices[0].text;			
 				if (resp) {					
 					result.items.push({
 						insertText: new vscode.SnippetString(resp),
-						range: new vscode.Range(currentPosition.translate(0, resp.length), currentPosition),     
-												
-					});
-					
+						range: new vscode.Range(currentPosition.translate(0, resp.length), currentPosition), 												
+					});					
 				};
-
 			}).catch((error) => {
 				console.log(error);
 			});
 			
 			process.dispose();
-			console.log(result.items[0].insertText);
-
+			
 			return result;
 
-            }
+            },
 	};
 
 
