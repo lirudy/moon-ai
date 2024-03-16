@@ -10,9 +10,11 @@ v0.0.1
 - 支持tab键触发推理，并提示，可用tab进行选择;
 - 支持静止5秒后进行提示，以减少对服务端的访问频率;
 
-
 当前已经测试的模型：
 - deepseek-coder-34b-instruct
+- nous-hermes-2-mixtral-8x7b-sft.Q4_K_M.gguf (文本生成结果不好，文不对题，可能是api调用问题)
+- bagel-dpo-34b-v0.2.Q4_K_M.gguf  （生成的不错，而且有足够的想象力）
+![alt text](bagel-novel.png)
 
 ### 代码解释
 选择一块代码，右键菜单中点击"moon-ai:解释代码"，可以用快捷键"ctrl+shift+e"
